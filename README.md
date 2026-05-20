@@ -2,9 +2,8 @@
 title: Career Assistant
 colorFrom: blue
 colorTo: indigo
-sdk: streamlit
-sdk_version: 1.50.0
-app_file: app.py
+sdk: docker
+app_port: 7860
 pinned: false
 license: mit
 ---
@@ -142,14 +141,14 @@ This takes a few minutes on first run while sentence-transformers downloads its 
 
 ## Deployment (Hugging Face Spaces)
 
-This repo is set up to deploy directly to [Hugging Face Spaces](https://huggingface.co/spaces) with the Streamlit SDK. The YAML header at the top of this README is the Space configuration.
+This repo is set up to deploy directly to [Hugging Face Spaces](https://huggingface.co/spaces) via the Docker SDK. The included `Dockerfile` and the YAML header at the top of this README configure the Space.
 
-1. Create a new Space at [huggingface.co/new-space](https://huggingface.co/new-space). Choose **Streamlit** as the SDK.
-2. Link the Space to this GitHub repository (or push the contents to the Space's git remote).
-3. In the Space's **Settings → Variables and secrets**, add a secret named `ANTHROPIC_API_KEY` with your Anthropic key.
-4. The Space builds and starts automatically. The committed `data/chroma_db/` directory means the app comes up without any ingestion step.
+1. Create a new Space at [huggingface.co/new-space](https://huggingface.co/new-space). Choose **Docker** as the SDK (Blank template).
+2. In the Space's **Settings → Variables and secrets**, add a secret named `ANTHROPIC_API_KEY` with your Anthropic key.
+3. Push the repo to the Space's git remote (`git push hf main`).
+4. The Space builds the Docker image automatically. The committed `data/chroma_db/` directory means the app comes up without any ingestion step.
 
-The free-tier hardware (CPU basic, 16 GB RAM) is sufficient for this app, though model weight downloads on the very first build can take a couple of minutes.
+The free-tier hardware (CPU basic, 16 GB RAM) is sufficient for this app, though the first build pulls dependencies and downloads sentence-transformer model weights (~160 MB), which can take a few minutes.
 
 ## Example Questions
 
@@ -168,8 +167,10 @@ The free-tier hardware (CPU basic, 16 GB RAM) is sufficient for this app, though
 ├── rag.py              # RAG chain: retriever + reranker + LLM
 ├── ingest.py           # Data ingestion and embedding pipeline
 ├── eval.py             # Evaluation script (source hit rate, relevance, refusal)
+├── Dockerfile          # Container image for Hugging Face Spaces deployment
 ├── requirements.txt    # Pinned Python dependencies
 ├── .env.example        # API key template
+├── .streamlit/         # Streamlit toolbar config
 ├── DesignOverview.md   # Detailed architecture writeup (Mermaid diagram)
 ├── report.md           # Full project report
 └── data/
