@@ -14,6 +14,8 @@ A domain-specific conversational assistant that answers career and job-related q
 
 Built as the final project for CS3390R (Natural Language Processing).
 
+**Live demo:** [huggingface.co/spaces/Popkaa/career-assistant](https://huggingface.co/spaces/Popkaa/career-assistant)
+
 ![App screenshot](docs/screenshot.png)
 
 ---
