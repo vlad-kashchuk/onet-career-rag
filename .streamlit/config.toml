@@ -1,0 +1,7 @@
+[client]
+# Hide the "Deploy" button and hamburger menu from the top-right toolbar.
+# Use "viewer" instead if you want to keep the hamburger menu but hide Deploy.
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false

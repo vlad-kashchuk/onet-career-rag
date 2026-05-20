@@ -2,11 +2,10 @@
 rag.py
 RAG chain: ChromaDB retriever + Claude API as LLM via LangChain.
 
-Improvements over v1:
 - MMR retrieval (fetch_k=20, return k=5) reduces redundant results
-- Optional cross-encoder reranking for higher precision
-- Streaming enabled on the answer LLM; condense step uses a separate non-streaming LLM
-- ask() returns richer source metadata (title + onet_code)
+- Cross-encoder reranking for higher precision
+- Streaming on the answer LLM; condense step uses a separate non-streaming LLM
+- ask() returns source metadata (title + onet_code)
 """
 
 import os
@@ -21,6 +20,17 @@ from langchain.prompts import PromptTemplate
 from langchain.schema import BaseRetriever
 
 load_dotenv()
+
+
+def _get_api_key() -> str:
+    # Works locally (.env) and on Hugging Face Spaces / Streamlit Cloud (env var).
+    key = os.getenv("ANTHROPIC_API_KEY")
+    if not key:
+        raise RuntimeError(
+            "ANTHROPIC_API_KEY is not set. Add it to your .env file locally, "
+            "or set it as a secret in your hosting platform."
+        )
+    return key
 
 CHROMA_DIR   = "data/chroma_db"
 EMBED_MODEL  = "all-MiniLM-L6-v2"
@@ -86,7 +96,7 @@ def build_chain(vectorstore: Chroma) -> ConversationalRetrievalChain:
     # Streaming LLM for answer generation
     llm = ChatAnthropic(
         model=CLAUDE_MODEL,
-        anthropic_api_key=os.getenv("ANTHROPIC_API_KEY"),
+        anthropic_api_key=_get_api_key(),
         temperature=0.3,
         max_tokens=1024,
         streaming=True,
@@ -95,7 +105,7 @@ def build_chain(vectorstore: Chroma) -> ConversationalRetrievalChain:
     # Non-streaming LLM for question condensing (avoids polluting stream output)
     llm_condense = ChatAnthropic(
         model=CLAUDE_MODEL,
-        anthropic_api_key=os.getenv("ANTHROPIC_API_KEY"),
+        anthropic_api_key=_get_api_key(),
         temperature=0,
         max_tokens=256,
         streaming=False,

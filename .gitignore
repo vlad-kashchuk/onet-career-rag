@@ -4,8 +4,8 @@
 .env.*
 !.env.example
 
-# Data (large / generated)
-data/chroma_db/
+# Data
+# data/chroma_db/ is committed so the app can run without re-ingestion
 data/raw/
 
 # Python
@@ -26,3 +26,6 @@ __pycache__/
 # IDE
 .vscode/
 .idea/
+
+# Claude Code harness
+.claude/
