@@ -127,3 +127,15 @@ with st.sidebar:
         st.session_state.messages = []
         chain.memory.clear()
         st.rerun()
+
+    st.markdown(
+        """
+        <div style='text-align: center; color: #888; font-size: 0.85em; padding-top: 2em;'>
+            Built by <b>Vlad Kashchuk</b><br>
+            <a href='https://www.linkedin.com/in/vlad-kash/' target='_blank' style='color: inherit;'>LinkedIn</a>
+            &nbsp;•&nbsp;
+            <a href='https://github.com/vlad-kashchuk/onet-career-rag' target='_blank' style='color: inherit;'>GitHub</a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
